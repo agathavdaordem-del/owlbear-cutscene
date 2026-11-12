@@ -1,0 +1,15 @@
+{
+  "name": "Cutscene",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "description": "O mestre escolhe um GIF ou imagem e ele aparece em tela cheia para todos os jogadores, como uma cutscene.",
+  "author": "Mesa",
+  "action": {
+    "title": "Cutscene",
+    "icon": "/icon.svg",
+    "popover": "/popover.html",
+    "height": 600,
+    "width": 360
+  },
+  "background_url": "/background.html"
+}

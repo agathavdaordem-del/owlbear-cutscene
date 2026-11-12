@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cutscene</title>
+    <style>
+      :root {
+        --text: #fff;
+        --muted: rgba(255, 255, 255, 0.6);
+        --line: rgba(255, 255, 255, 0.16);
+        --field: rgba(255, 255, 255, 0.08);
+        --accent: #bb99ff;
+        --danger: #ff6b6b;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 14px;
+        color: var(--text);
+        font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: transparent;
+      }
+      h1 { font-size: 15px; margin: 0 0 10px; }
+      label { display: block; margin: 10px 0 4px; color: var(--muted); font-size: 12px; }
+      input[type="text"], input[type="number"], select {
+        width: 100%;
+        padding: 8px 10px;
+        color: var(--text);
+        background: var(--field);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font: inherit;
+      }
+      input:focus, select:focus, button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+      }
+      select option { color: #111; }
+      .row { display: flex; gap: 8px; }
+      .row > * { flex: 1; }
+      .check { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; color: var(--text); }
+      .check input { margin: 0; }
+
+      #preview {
+        margin-top: 10px;
+        height: 96px;
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.25);
+      }
+      #preview img { max-width: 100%; max-height: 100%; }
+
+      button {
+        font: inherit;
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: var(--field);
+        border-radius: 8px;
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+      button:hover { background: rgba(255, 255, 255, 0.16); }
+      button.primary { background: var(--accent); color: #1b1230; border-color: transparent; font-weight: 600; }
+      button.primary:hover { filter: brightness(1.08); }
+      button.danger { color: var(--danger); }
+      .actions { margin-top: 12px; }
+
+      h2 { font-size: 12px; margin: 16px 0 6px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+      #presets { display: grid; gap: 6px; max-height: 120px; overflow: auto; }
+      .preset {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .preset .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .preset button { padding: 4px 8px; }
+      #empty { color: var(--muted); }
+      #status { min-height: 18px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+      #status.err { color: var(--danger); }
+      #blocked { display: none; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div id="blocked">Só o mestre pode iniciar cutscenes.</div>
+
+    <div id="app" hidden>
+      <h1>🎬 Cutscene</h1>
+
+      <label for="url">Link do GIF ou imagem</label>
+      <input id="url" type="text" placeholder="https://.../animacao.gif" autocomplete="off" />
+
+      <div id="preview">Pré-visualização</div>
+
+      <label for="caption">Legenda / nome (opcional)</label>
+      <input id="caption" type="text" maxlength="200" placeholder="Ex.: O dragão desperta..." />
+
+      <div class="row">
+        <div>
+          <label for="duration">Duração (s, 0 = até parar)</label>
+          <input id="duration" type="number" min="0" max="600" step="1" value="8" />
+        </div>
+        <div>
+          <label for="fit">Ajuste</label>
+          <select id="fit">
+            <option value="contain">Inteira (contain)</option>
+            <option value="cover">Preencher (cover)</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="bg">Fundo</label>
+      <select id="bg">
+        <option value="black">Preto total</option>
+        <option value="dim">Translúcido (vê o mapa)</option>
+      </select>
+
+      <label class="check"><input id="bars" type="checkbox" checked /> Barras de cinema</label>
+      <label class="check"><input id="lock" type="checkbox" checked /> Jogadores não podem fechar</label>
+
+      <div class="row actions">
+        <button id="play" class="primary">▶ Reproduzir</button>
+        <button id="stop" class="danger">■ Parar</button>
+      </div>
+      <div class="row actions">
+        <button id="save">★ Salvar como atalho</button>
+      </div>
+
+      <div id="status"></div>
+
+      <h2>Atalhos salvos</h2>
+      <div id="presets"></div>
+    </div>
+
+    <script type="module" src="./popover.js"></script>
+  </body>
+</html>
